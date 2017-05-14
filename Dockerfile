@@ -2,8 +2,6 @@
 FROM resin/rpi-raspbian
 MAINTAINER Daniel Floris <daniel.floris@gmail.com>
 
-RUN rm /bin/sh && ln -s /bin/bash /bin/sh
-
 RUN apt-get update && \
     apt-get install -y \
     python3 \
