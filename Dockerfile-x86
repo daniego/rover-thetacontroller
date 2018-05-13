@@ -1,0 +1,40 @@
+FROM ubuntu:xenial
+MAINTAINER Daniel Floris <daniel.floris@gmail.com>
+
+
+ADD thetacontroller/requirements.txt /srv/rover-thetacontroller/requirements.txt
+ADD thetacontroller /srv/rover-thetacontroller/thetacontroller
+
+ADD https://downloads.sourceforge.net/project/libptp/libptp2/libptp2-1.2.0/libptp2-1.2.0.tar.gz /
+
+RUN apt-get update && \
+    apt-get install -y \
+    python3 \
+    python3-venv \
+    subversion \
+    libtool \
+    make \
+    automake \
+    tar \
+    libusb-dev && \
+    #
+    tar zxvf /libptp2-1.2.0.tar.gz && \
+    #
+    cd /libptp2-1.2.0 && \
+    ./configure && \
+    make && \
+    make install && \
+    ldconfig && \
+    #
+    apt-get purge -y \
+      subversion \
+      make && \
+    rm -rf /var/lib/apt/lists/*
+
+# Virtualenv and pip requirements
+RUN python3 -m venv /opt/rover-thetacontroller && \
+    cd /srv/rover-thetacontroller && \
+    /opt/rover-thetacontroller/bin/pip install -r requirements.txt && \
+    echo "source /opt/rover-thetacontroller/bin/activate" >> /root/.bashrc
+
+WORKDIR /srv/rover-thetacontroller/thetacontroller
