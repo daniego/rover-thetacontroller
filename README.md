@@ -20,3 +20,5 @@ Get battery state:
 # ToDo
 Clean Dockerfile-arm
 Activate streaming mode
+supervisor
+environment variables
