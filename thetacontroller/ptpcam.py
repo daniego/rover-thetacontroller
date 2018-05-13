@@ -4,6 +4,19 @@ import subprocess
 References for USB commands can be found here
 https://developers.theta360.com/en/docs/v2/usb_reference/
 '''
+def getBatteryState():
+    # ptpcam returns an output like this:
+    # Camera: RICOH THETA S
+    # 'Battery Level' is set to: 100
+    ptpbattery = subprocess.Popen(["ptpcam", "--show-property=0x5001"], stdout=subprocess.PIPE)
+
+    # keeping only the second line
+    ptpbattery = ptpbattery.stdout.readlines()[2]
+
+    # Splitting the string
+    ptpbattery = ptpbattery.split()
+
+    return(ptpbattery[-1])
 
 ## example of taking a picture
 def takePicture():
@@ -20,13 +33,6 @@ def getInfo():
 def getState():
     # example of grabbing device info and using it in your python program.
     ptpstate = subprocess.Popen(["ptpcam", "--info"], stdout=subprocess.PIPE)
-
-def getBattery():
-    # example of grabbing device info and using it in your python program.
-    ptpbattery = subprocess.Popen(["ptpcam", "--show-property=0x5001"], stdout=subprocess.PIPE)
-    print(ptpbattery.stdout.readlines()[2])
-    # for line in ptpbattery.stdout.readlines():
-    #     print(line.rstrip())
 
 # although this simply prints to stdout, you can parse
 # the response for your program
